@@ -37,3 +37,31 @@ for (var i = 0; i < albums.length; i++) {
     this.className += " cover-active";
   });
 }
+
+// Album Template with Handlebars
+var albumSource = $('#album-template').html();
+var albumTemplate = Handlebars.compile(albumSource);
+
+$.ajax({
+    url: 'https://flynn.boolean.careers/exercises/api/array/music',
+    method: 'GET',
+    success: function (res) {
+        var albums = res.response;
+        for (var i = 0; i < albums.length; i++) {
+            console.log(albums[i]);
+            var album = {
+                albumCover: albums[i].poster,
+                albumTitle: albums[i].title,
+                albumAuthor: albums[i].author,
+                albumGenre: albums[i].genre,
+                albumYear: albums[i].year
+            }
+
+            var albumTemplateHTML = albumTemplate(album);
+            $('#albums').append(albumTemplateHTML);
+        }
+    },
+    error: function () {
+        console.log('Errore');
+    }
+});
